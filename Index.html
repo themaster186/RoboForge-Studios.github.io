@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboForge Studios - Custom Roblox Game Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .packages-section {
+            background: white;
+            padding: 4rem 0;
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .package-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            cursor: pointer;
+        }
+
+        .package-card:hover, .package-card.selected {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .package-card.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .package-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .package-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .package-card.selected .package-price {
+            color: #fff;
+        }
+
+        .package-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .package-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .package-features li:before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .package-card.selected .package-features li:before {
+            color: #fff;
+        }
+
+        .customization-section {
+            background: #f8f9ff;
+            padding: 3rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .customization-section.active {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .addon-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .addon-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .addon-card:hover, .addon-card.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .price-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .total-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">RoboForge Studios</div>
+                <ul class="nav-links">
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Custom Roblox Game Development</h1>
+            <p>Transform your game ideas into reality with professional Roblox development services</p>
+        </div>
+    </section>
+
+    <section class="packages-section" id="packages">
+        <div class="container">
+            <h2 class="section-title">Choose Your Package</h2>
+            
+            <div class="packages-grid">
+                <div class="package-card" data-package="basic" data-price="750">
+                    <div class="package-title">Basic Game Creation</div>
+                    <div class="package-price">$500 - $1,500</div>
+                    <ul class="package-features">
+                        <li>Simple obby or simulator game</li>
+                        <li>Basic GUI design</li>
+                        <li>Player data saving</li>
+                        <li>Mobile optimization</li>
+                        <li>2 weeks development time</li>
+                        <li>1 month bug fix support</li>
+                    </ul>
+                </div>
+
+                <div class="package-card" data-package="advanced" data-price="3500">
+                    <div class="package-title">Advanced Game Development</div>
+                    <div class="package-price">$2,000 - $5,000</div>
+                    <ul class="package-features">
+                        <li>Complex game mechanics</li>
+                        <li>Custom GUI systems</li>
+                        <li>Advanced scripting</li>
+                        <li>Multiplayer features</li>
+                        <li>4-6 weeks development</li>
+                        <li>3 months support</li>
+                    </ul>
+                </div>
+
+                <div class="package-card" data-package="monetization" data-price="1400">
+                    <div class="package-title">Game Monetization</div>
+                    <div class="package-price">$800 - $2,000</div>
+                    <ul class="package-features">
+                        <li>DevProduct integration</li>
+                        <li>Gamepass creation</li>
+                        <li>Economy balancing</li>
+                        <li>Premium benefits system</li>
+                        <li>Analytics setup</li>
+                        <li>Revenue optimization</li>
+                    </ul>
+                </div>
+
+                <div class="package-card" data-package="support" data-price="350">
+                    <div class="package-title">Ongoing Support</div>
+                    <div class="package-price">$200 - $500/mo</div>
+                    <ul class="package-features">
+                        <li>Monthly content updates</li>
+                        <li>Bug fixes & maintenance</li>
+                        <li>Feature additions</li>
+                        <li>Performance optimization</li>
+                        <li>24/7 priority support</li>
+                        <li>Analytics reporting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="customization-section" id="customization">
+                <h3>Customize Your Order</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gameName">Game Name/Concept</label>
+                        <input type="text" id="gameName" placeholder="Enter your game idea">
+                    </div>
+                    <div class="form-group">
+                        <label for="gameGenre">Game Genre</label>
+                        <select id="gameGenre">
+                            <option>Select Genre</option>
+                            <option>Obby/Parkour</option>
+                            <option>Simulator</option>
+                            <option>RPG</option>
+                            <option>Tycoon</option>
+                            <option>Racing</option>
+                            <option>Fighting</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gameDescription">Detailed Description</label>
+                    <textarea id="gameDescription" rows="4" placeholder="Describe your game concept, features, and any specific requirements..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timeline">Preferred Timeline</label>
+                        <select id="timeline">
+                            <option>Standard Timeline</option>
+                            <option>Rush Job (+50%)</option>
+                            <option>Extended Timeline (-10%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="players">Max Players</label>
+                        <select id="players">
+                            <option>1-10 players</option>
+                            <option>10-20 players (+$200)</option>
+                            <option>20-50 players (+$500)</option>
+                            <option>50+ players (+$1000)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Add-on Services</label>
+                    <div class="addon-options">
+                        <div class="addon-card" data-addon="ui" data-price="300">
+                            <strong>Premium UI Design</strong><br>
+                            +$300
+                        </div>
+                        <div class="addon-card" data-addon="sounds" data-price="150">
+                            <strong>Custom Sound Effects</strong><br>
+                            +$150
+                        </div>
+                        <div class="addon-card" data-addon="admin" data-price="200">
+                            <strong>Admin Commands</strong><br>
+                            +$200
+                        </div>
+                        <div class="addon-card" data-addon="anticheat" data-price="400">
+                            <strong>Anti-Cheat System</strong><br>
+                            +$400
+                        </div>
+                        <div class="addon-card" data-addon="social" data-price="250">
+                            <strong>Social Features</strong><br>
+                            +$250
+                        </div>
+                        <div class="addon-card" data-addon="analytics" data-price="100">
+                            <strong>Analytics Dashboard</strong><br>
+                            +$100
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="clientName">Your Name</label>
+                        <input type="text" id="clientName" placeholder="Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEmail">Email Address</label>
+                        <input type="email" id="clientEmail" placeholder="your@email.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="robloxUsername">Roblox Username</label>
+                        <input type="text" id="robloxUsername" placeholder="Your Roblox username">
+                    </div>
+                    <div class="form-group">
+                        <label for="discord">Discord Username (Optional)</label>
+                        <input type="text" id="discord" placeholder="username#0000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="price-summary" id="priceSummary" style="display: none;">
+                <div class="total-price" id="totalPrice">$0</div>
+                <div id="priceBreakdown"></div>
+                <button class="btn" onclick="submitOrder()">Place Order</button>
+                <button class="btn btn-secondary" onclick="resetOrder()">Start Over</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="contact-info" id="contact">
+            <h3>Ready to Start Your Project?</h3>
+            <p>Get in touch to discuss your game concept and receive a custom quote</p>
+            <p><strong>Email:</strong> karstenandco@gmail.com </p> <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+            <p><strong>Discord:</strong> Coming Soon! </p>
+            <p><strong>Response Time:</strong> Within 3 Business Days</p>
+        </div>
+    </div>
+
+    <script>
+        let selectedPackage = null;
+        let basePrice = 0;
+        let selectedAddons = [];
+        let timelineMultiplier = 1;
+        let playerMultiplier = 0;
+
+        // Package selection
+        document.querySelectorAll('.package-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                selectedPackage = this.dataset.package;
+                basePrice = parseInt(this.dataset.price);
+                
+                document.getElementById('customization').classList.add('active');
+                updatePrice();
+            });
+        });
+
+        // Addon selection
+        document.querySelectorAll('.addon-card').forEach(addon => {
+            addon.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const addonName = this.dataset.addon;
+                const addonPrice = parseInt(this.dataset.price);
+                
+                if (this.classList.contains('selected')) {
+                    selectedAddons.push({name: addonName, price: addonPrice});
+                } else {
+                    selectedAddons = selectedAddons.filter(a => a.name !== addonName);
+                }
+                updatePrice();
+            });
+        });
+
+        // Timeline selection
+        document.getElementById('timeline').addEventListener('change', function() {
+            const value = this.value;
+            if (value.includes('Rush')) {
+                timelineMultiplier = 1.5;
+            } else if (value.includes('Extended')) {
+                timelineMultiplier = 0.9;
+            } else {
+                timelineMultiplier = 1;
+            }
+            updatePrice();
+        });
+
+        // Player count selection
+        document.getElementById('players').addEventListener('change', function() {
+            const value = this.value;
+            if (value.includes('10-20')) {
+                playerMultiplier = 200;
+            } else if (value.includes('20-50')) {
+                playerMultiplier = 500;
+            } else if (value.includes('50+')) {
+                playerMultiplier = 1000;
+            } else {
+                playerMultiplier = 0;
+            }
+            updatePrice();
+        });
+
+        function updatePrice() {
+            if (!selectedPackage) return;
+            
+            let total = basePrice;
+            let breakdown = [`${selectedPackage.charAt(0).toUpperCase() + selectedPackage.slice(1)} Package: $${basePrice}`];
+            
+            // Add addons
+            selectedAddons.forEach(addon => {
+                total += addon.price;
+                breakdown.push(`${addon.name.toUpperCase()} Add-on: $${addon.price}`);
+            });
+            
+            // Add player multiplier
+            total += playerMultiplier;
+            if (playerMultiplier > 0) {
+                breakdown.push(`Extended Player Count: $${playerMultiplier}`);
+            }
+            
+            // Apply timeline multiplier
+            total = Math.round(total * timelineMultiplier);
+            if (timelineMultiplier !== 1) {
+                const modifier = timelineMultiplier > 1 ? 'Rush Job (+50%)' : 'Extended Timeline (-10%)';
+                breakdown.push(`${modifier}: ${timelineMultiplier > 1 ? '+' : ''}${Math.round((timelineMultiplier - 1) * 100)}%`);
+            }
+            
+            document.getElementById('totalPrice').textContent = `$${total}`;
+            document.getElementById('priceBreakdown').innerHTML = breakdown.join('<br>');
+            document.getElementById('priceSummary').style.display = 'block';
+        }
+
+        function submitOrder() {
+            const formData = {
+                package: selectedPackage,
+                gameName: document.getElementById('gameName').value,
+                gameGenre: document.getElementById('gameGenre').value,
+                gameDescription: document.getElementById('gameDescription').value,
+                timeline: document.getElementById('timeline').value,
+                players: document.getElementById('players').value,
+                addons: selectedAddons,
+                clientName: document.getElementById('clientName').value,
+                clientEmail: document.getElementById('clientEmail').value,
+                robloxUsername: document.getElementById('robloxUsername').value,
+                discord: document.getElementById('discord').value,
+                totalPrice: document.getElementById('totalPrice').textContent
+            };
+            
+            if (!formData.clientName || !formData.clientEmail || !formData.gameName) {
+                alert('Please fill in all required fields (Name, Email, Game Name)');
+                return;
+            }
+            
+            // In a real implementation, this would send to your backend
+            alert(`Order submitted successfully! 
+            
+Package: ${selectedPackage}
+Total: ${document.getElementById('totalPrice').textContent}
+
+We'll contact you within 24 hours at ${formData.clientEmail} to discuss your project details and payment.`);
+            
+            console.log('Order Data:', formData);
+        }
+
+        function resetOrder() {
+            selectedPackage = null;
+            basePrice = 0;
+            selectedAddons = [];
+            timelineMultiplier = 1;
+            playerMultiplier = 0;
+            
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.addon-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('customization').classList.remove('active');
+            document.getElementById('priceSummary').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('gameName').value = '';
+            document.getElementById('gameGenre').selectedIndex = 0;
+            document.getElementById('gameDescription').value = '';
+            document.getElementById('timeline').selectedIndex = 0;
+            document.getElementById('players').selectedIndex = 0;
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('robloxUsername').value = '';
+            document.getElementById('discord').value = '';
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
